@@ -1,45 +1,80 @@
-# Banking-Systems
 #include <iostream>
-#include <string>
-#include <vector>
+#include <iomanip>
 
-class Account {
-public:
-    std::string accountNumber;
-    std::string accountHolderName;
-    double balance;
+void showBalance(double balance);
+double deposit();
+double withdraw(double balance);
 
-    Account(std::string number, std::string name, double initialBalance) : accountNumber(number), accountHolderName(name), balance(initialBalance) {}
+int main()
+{
+    double balance = 0;
+    int choice = 0;
 
-    void deposit(double amount) {
-        balance += amount;
-        std::cout << "Deposit successful. New balance: " << balance << std::endl;
-    }
+    do{
+        std::cout << "******************\n";
+        std::cout << "Enter your choice:\n";
+        std::cout << "******************\n";
+        std::cout << "1. Show Balance\n";
+        std::cout << "2. Deposit Money\n";
+        std::cout << "3. Withdraw Money\n";
+        std::cout << "4. Exit\n";
+        std::cin >> choice;
 
-    void withdraw(double amount) {
-        if (balance >= amount) {
-            balance -= amount;
-            std::cout << "Withdrawal successful. New balance: " << balance << std::endl;
-        } else {
-            std::cout << "Insufficient balance." << std::endl;
+        std::cin.clear(); 
+        fflush(stdin);
+
+        switch(choice){
+            case 1: showBalance(balance);
+                    break;
+            case 2: balance += deposit();
+                    showBalance(balance);
+                    break;
+            case 3: balance -= withdraw(balance);
+                    showBalance(balance);
+                    break;
+            case 4: std::cout << "Thanks for visiting!\n";
+                    break;
+            default:std::cout << "Invalid choice\n";
         }
-    }
-
-    void checkBalance() const {
-        std::cout << "Account balance for " << accountHolderName << ": " << balance << std::endl;
-    }
-};
-
-int main() {
-    // Create an account
-    Account myAccount("123456789", "John Doe", 1000.0);
-
-    // Perform operations
-    myAccount.checkBalance();
-    myAccount.deposit(500.0);
-    myAccount.withdraw(200.0);
-    myAccount.withdraw(2000.0);
-    myAccount.checkBalance();
+    }while(choice != 4);
 
     return 0;
+}
+void showBalance(double balance){
+    
+    std::cout << "Your balance is: $"<< std::setprecision(2) << std::fixed << balance << '\n';
+}
+double deposit(){
+    
+    double amount = 0;
+
+    std::cout << "Enter amount to be deposited: ";
+    std::cin >> amount;
+
+    if(amount > 0){
+        return amount;
+    }
+    else{
+        std::cout << "That's not a valid amount:\n";
+        return 0;
+    }
+}
+double withdraw(double balance){
+
+    double amount = 0;
+
+    std::cout << "Enter amount to be withdrawn: ";
+    std::cin >> amount;
+
+    if(amount > balance){
+        std::cout << "insufficient funds\n";
+        return 0;
+    }
+    else if(amount < 0){
+        std::cout << "That's not a valid amount\n";
+        return 0;
+    }
+    else{
+        return amount;
+    }
 }
